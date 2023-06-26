@@ -20,11 +20,17 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - name: 'install cargo-auditable from crates.io'
+    - name: 'install cargo-auditable from crates.io with specified version'
+      if: ${{ inputs.cargo_auditable_version }} == null
       uses: 'baptiste0928/cargo-install@v2.1.0'
       with:
         crate: 'cargo-auditable'
         version: ${{ inputs.cargo_auditable_version }}
+    - name: 'install latest cargo-auditable from crates.io'
+      if: ${{ inputs.cargo_auditable_version }} != null
+      uses: 'baptiste0928/cargo-install@v2.1.0'
+      with:
+        crate: 'cargo-auditable'
     - name: 'checkout the sources'
       uses: actions/checkout@v3.5.3
     - name: 'run cargo-auditable with selected Rust toolchain and cargo arguemnts'
