@@ -1,0 +1,35 @@
+name: 'cargo-auditable build'
+description: 'Install cargo-auditable, checkout your repository and build an auditable binary with cargo-auditable'
+
+branding:
+  color: 'orange'
+  icon: 'file-text'
+
+inputs:
+  args:
+    description: 'the arguments that should be passed to cargo e.g. `--all-targets`'
+    required: false
+  toolchain:
+    description: 'the toolchain to use with `+` sign ommitted'
+    required: true
+    default: 'stable'
+  cargo_auditable_version:
+    description: 'the version of cargo-auditable to fetch from crates.io'
+    required: false
+
+runs:
+  using: 'composite'
+  steps:
+    - name: 'install cargo-auditable from crates.io'
+      uses: 'baptiste0928/cargo-install@v2.1.0'
+      with:
+        crate: 'cargo-auditable'
+        version: ${{ inputs.cargo_auditable_version }}
+    - name: 'checkout the sources'
+      uses: actions/checkout@v3.5.3
+    - name: 'run cargo-auditable with selected Rust toolchain and cargo arguemnts'
+      uses: actions-rs/cargo@v1.0.1
+      with:
+        command: auditable build
+        toolchain: ${{ inputs.toolchain }}
+        args: ${{ inputs.args }}
