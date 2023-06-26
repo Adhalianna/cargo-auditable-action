@@ -31,6 +31,6 @@ runs:
     - name: 'run cargo-auditable with selected Rust toolchain and cargo arguemnts'
       uses: actions-rs/cargo@v1.0.1
       with:
-        command: auditable build
+        command: auditable
         toolchain: ${{ inputs.toolchain }}
-        args: ${{ inputs.args }}
+        args:  ${{ format('build {0}', inputs.args) }}
